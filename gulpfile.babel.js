@@ -26,7 +26,7 @@ const reload = browserSync.reload;
 // Optimize images
 gulp.task('images', () =>
   gulp
-    .src('app/images/**/*')
+    .src('app/img/**/*')
     .pipe(
       $.cache(
         $.imagemin({
@@ -35,7 +35,7 @@ gulp.task('images', () =>
         })
       )
     )
-    .pipe(gulp.dest('dist/images'))
+    .pipe(gulp.dest('dist/img'))
     .pipe($.size({ title: 'images' }))
 );
 
@@ -73,7 +73,7 @@ gulp.task('styles', () => {
   // For best performance, don't add Sass partials to `gulp.src`
   return (
     gulp
-      .src(['app/styles/**/*.scss', 'app/styles/**/*.css'])
+      .src(['app/css/**/*.scss', 'app/styles/**/*.css'])
       .pipe($.newer('.tmp/styles'))
       .pipe($.sourcemaps.init())
       .pipe(
@@ -94,7 +94,12 @@ gulp.task('styles', () => {
 
 gulp.task('scripts', () => {
   const b = browserify({
-    entries: 'app/scripts/main.js',
+    entries: [
+      'app/js/bootstrap.min.js',
+      'app/js/mdb.min.js',
+      'app/js/jquery-3.2.1.min.js',
+      'app/js/popper.min.js'
+    ],
     transform: babelify,
     debug: true
   });
@@ -165,9 +170,9 @@ gulp.task('serve', ['scripts', 'styles'], () => {
   });
 
   gulp.watch(['app/**/*.html'], reload);
-  gulp.watch(['app/styles/**/*.{scss,css}'], ['styles', reload]);
-  gulp.watch(['app/scripts/**/*.js'], ['scripts', reload]);
-  gulp.watch(['app/images/**/*'], reload);
+  gulp.watch(['app/css/**/*.{scss,css}'], ['styles', reload]);
+  gulp.watch(['app/js/**/*.js'], ['scripts', reload]);
+  gulp.watch(['app/img/**/*'], reload);
 });
 
 // Build and serve the output from the dist build
